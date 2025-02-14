@@ -68,7 +68,7 @@ const getStatusColor = (pints: number) => {
   if (pints >= 7) return 'bg-slate-950 text-white'
   if (pints >= 4) return 'bg-orange-600 text-white'
   if (pints >= 1) return 'bg-yellow-400 text-black'
-  return 'bg-emerald-950 text-white'
+  return 'bg-emerald-800 text-white'
 }
 
 const getStatusText = (pints: number) => {
@@ -81,18 +81,18 @@ const getStatusText = (pints: number) => {
 const getDayColor = (date: Date) => {
   const dateStr = format(date, 'yyyy-MM-dd')
   const log = waterLogs.value.find(log => log.date === dateStr)
-  if (!log) return 'bg-neutral-50'
-  if (log.pints >= 7) return 'bg-slate-950 hover:bg-slate-800'
-  if (log.pints >= 4) return 'bg-orange-600 hover:bg-orange-500'
-  if (log.pints >= 1) return 'bg-yellow-400 hover:bg-yellow-300'
-  return 'bg-emerald-950 hover:bg-emerald-800'
+  if (!log) return 'bg-emerald-700 text-white hover:bg-emerald-600' // Set default color for sober
+  if (log.pints >= 7) return 'bg-slate-950 text-white hover:bg-slate-800'
+  if (log.pints >= 4) return 'bg-orange-600 text-white hover:bg-orange-500'
+  if (log.pints >= 1) return 'bg-yellow-400 text-black hover:bg-yellow-300'
+  return 'bg-emerald-700 text-white hover:bg-emerald-600' // Sober
 }
 
 const openDialog = (date: Date) => {
   selectedDate.value = date
   const dateStr = format(date, 'yyyy-MM-dd')
   const log = waterLogs.value.find(log => log.date === dateStr)
-  currentPints.value = log ? log.pints : 0
+  currentPints.value = log ? log.pints : 0 // Default to 0 pints if no log exists
   isOpen.value = true
 }
 
@@ -222,6 +222,32 @@ const sortedLogs = computed(() => {
     
     <!-- Calendar View -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+
+      <div class="mt-6 text-sm text-gray-600 flex gap-4 mb-10 align-middle items-center w-full bg-gray-50 p-4">
+
+       
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-emerald-800"></div>
+          <span>0 pints <span style="font-weight: bold;">: 😇 Sober</span></span>
+        </div>
+       
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-yellow-400"></div>
+          <span>1-3 pints <span style="font-weight: bold;">: 🙃 Okay</span></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-orange-600"></div>
+          <span>4-6 pints <span style="font-weight: bold;">: ☹️ Bad</span></span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-neutral-900"></div>
+          <span>7+ pints <span style="font-weight: bold;">: 🥴 BlackOut</span></span>
+        </div>
+
+
+      </div>
+
+
       <template v-if="currentView === 'year'">
         <div class="grid grid-cols-3 gap-8">
           <div v-for="month in monthsInYear" :key="format(month, 'MM')" class="space-y-2">
@@ -266,20 +292,6 @@ const sortedLogs = computed(() => {
         </div>
       </template>
       
-      <div class="mt-6 text-sm text-gray-600 flex gap-4">
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-green-100"></div>
-          <span>8+ pints</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-yellow-100"></div>
-          <span>6-7 pints</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-red-100"></div>
-          <span>&lt;6 pints</span>
-        </div>
-      </div>
     </div>
 
     <!-- Recent History -->

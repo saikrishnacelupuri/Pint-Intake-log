@@ -45,9 +45,7 @@ const getDayColor = (date: Date) => {
   return 'bg-emerald-700 text-white hover:bg-emerald-600' // Sober
 }
 
-const openDialog = (date: Date) => {
-  // This function can be removed as the modal is no longer needed
-}
+
 
 const calendarDays = computed(() => {
   switch (currentView.value) {
@@ -177,28 +175,31 @@ const sortedLogs = computed(() => {
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
 
           <!-- Color Coding Reference -->
-            <div class="mb-4 p-4 bg-gray-50 rounded-md">
+            <div class="mb-2 p-4 bg-gray-50 rounded-md">
 
-      <div class="flex flex-row gap-6">
+             <div class=" p-4 bg-gray-50 rounded-md">
+  <div class="flex flex-col sm:flex-row gap-6">
+    <div class="flex items-center">
+      <div class="w-4 h-4 rounded bg-emerald-700 mr-2"></div>
+      <span>0 pints: 😇 Sober</span>
+    </div>
 
-        <div class="flex items-center">
-          <div class="w-4 h-4 rounded bg-emerald-700 mr-2"></div>
-          <span>0 pints: 😇 Sober</span>
-        </div>
+    <div class="flex items-center">
+      <div class="w-4 h-4 rounded bg-yellow-400 mr-2"></div>
+      <span>1-3 pints: 🙃 Good</span>
+    </div>
 
-        <div class="flex items-center">
-          <div class="w-4 h-4 rounded bg-yellow-400 mr-2"></div>
-          <span>1-3 pints: 🙃 Good</span>
-        </div>
-        <div class="flex items-center">
-          <div class="w-4 h-4 rounded bg-orange-600 mr-2"></div>
-          <span>4-6 pints: ☹️ Bad</span>
-        </div>
-        <div class="flex items-center">
-          <div class="w-4 h-4 rounded bg-slate-950 mr-2"></div>
-          <span>7+ pints: 🥴 BlackOut</span>
-        </div>
-      </div>
+    <div class="flex items-center">
+      <div class="w-4 h-4 rounded bg-orange-600 mr-2"></div>
+      <span>4-6 pints: ☹️ Bad</span>
+    </div>
+
+    <div class="flex items-center">
+      <div class="w-4 h-4 rounded bg-slate-950 mr-2"></div>
+      <span>7+ pints: 🥴 BlackOut</span>
+    </div>
+  </div>
+</div>
 
 
 

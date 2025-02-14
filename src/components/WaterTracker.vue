@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, startOfYear, endOfYear, addMonths, subMonths, addWeeks, subWeeks } from 'date-fns'
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, startOfYear, endOfYear, addMonths, subMonths, addWeeks, subWeeks } from 'date-fns'
 
 
 interface WaterLog {
@@ -47,15 +47,6 @@ const getDayColor = (date: Date) => {
 
 
 
-const calendarDays = computed(() => {
-  switch (currentView.value) {
-    case 'year':
-      return eachDayOfInterval({
-        start: startOfYear(currentDate.value),
-        end: endOfYear(currentDate.value)
-      })
-  }
-})
 
 const monthsInYear = computed(() => {
   const months = []

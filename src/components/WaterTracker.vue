@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, startOfYear, endOfYear, addMonths, subMonths, addWeeks, subWeeks } from 'date-fns'
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, startOfYear, addMonths, subMonths, addWeeks, subWeeks } from 'date-fns'
 
 
 interface WaterLog {

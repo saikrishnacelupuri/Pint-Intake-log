@@ -183,7 +183,7 @@ const sortedLogs = computed(() => {
 
 <template>
   <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-8 text-center">Kit's Pint Tracker🍺🍻</h1>
+    <h1 class="text-3xl font-bold mb-8 text-center">Kit's Pint Tracker🍺🍻🍻</h1>
     
     <!-- View Switcher -->
     <div class="flex justify-between items-center mb-6">

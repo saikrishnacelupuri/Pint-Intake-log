@@ -49,18 +49,6 @@ const getDayColor = (date: Date) => {
 
 const calendarDays = computed(() => {
   switch (currentView.value) {
-    case 'day':
-      return [currentDate.value]
-    case 'week':
-      return eachDayOfInterval({
-        start: startOfWeek(currentDate.value),
-        end: endOfWeek(currentDate.value)
-      })
-    case 'month':
-      return eachDayOfInterval({
-        start: startOfMonth(currentDate.value),
-        end: endOfMonth(currentDate.value)
-      })
     case 'year':
       return eachDayOfInterval({
         start: startOfYear(currentDate.value),
@@ -140,7 +128,7 @@ const sortedLogs = computed(() => {
     <div class="flex justify-between items-center mb-6">
       <div class="flex gap-2">
         <button
-          v-for="view in ['day', 'week', 'month', 'year']"
+          v-for="view in ['year']"
           :key="view"
           @click="currentView = view as ViewType"
           :class="[
@@ -174,39 +162,35 @@ const sortedLogs = computed(() => {
     <!-- Calendar View -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
 
-          <!-- Color Coding Reference -->
-            <div class="mb-2 p-4 bg-gray-50 rounded-md">
+        <!-- Color Coding Reference -->
+        <div class="mb-2 p-4 bg-gray-50 rounded-md">
 
-             <div class=" p-4 bg-gray-50 rounded-md">
-  <div class="flex flex-col sm:flex-row gap-6">
-    <div class="flex items-center">
-      <div class="w-4 h-4 rounded bg-emerald-700 mr-2"></div>
-      <span>0 pints: 😇 Sober</span>
-    </div>
-
-    <div class="flex items-center">
-      <div class="w-4 h-4 rounded bg-yellow-400 mr-2"></div>
-      <span>1-3 pints: 🙃 Good</span>
-    </div>
-
-    <div class="flex items-center">
-      <div class="w-4 h-4 rounded bg-orange-600 mr-2"></div>
-      <span>4-6 pints: ☹️ Bad</span>
-    </div>
-
-    <div class="flex items-center">
-      <div class="w-4 h-4 rounded bg-slate-950 mr-2"></div>
-      <span>7+ pints: 🥴 BlackOut</span>
-    </div>
-  </div>
+<div class=" p-4 bg-gray-50 rounded-md">
+<div class="flex flex-col sm:flex-row gap-6">
+<div class="flex items-center">
+<div class="w-4 h-4 rounded bg-emerald-700 mr-2"></div>
+<span>0 pints: 😇 Sober</span>
 </div>
 
+<div class="flex items-center">
+<div class="w-4 h-4 rounded bg-yellow-400 mr-2"></div>
+<span>1-3 pints: 🙃 Good</span>
+</div>
 
+<div class="flex items-center">
+<div class="w-4 h-4 rounded bg-orange-600 mr-2"></div>
+<span>4-6 pints: ☹️ Bad</span>
+</div>
 
-
-    </div>
+<div class="flex items-center">
+<div class="w-4 h-4 rounded bg-slate-950 mr-2"></div>
+<span>7+ pints: 🥴 BlackOut</span>
+</div>
+</div>
+</div>
+</div>
       <template v-if="currentView === 'year'">
-        <div class="grid grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div v-for="month in monthsInYear" :key="format(month, 'MM')" class="space-y-2">
             <h3 class="font-semibold text-center">{{ format(month, 'MMMM') }}</h3>
             <div class="grid grid-cols-7 gap-1">
@@ -221,7 +205,7 @@ const sortedLogs = computed(() => {
                       :key="date.toISOString()"
                       :class="[
                         getDayColor(date),
-                        'p-1 rounded transition-colors text-center text-sm hover:shadow-sm'
+                        'p-2 rounded transition-colors text-center text-sm hover:shadow-sm'
                       ]">
                 {{ format(date, 'd') }}
               </button>
@@ -229,24 +213,6 @@ const sortedLogs = computed(() => {
           </div>
         </div>
       </template>
-      
-      <template v-else>
-        <div class="grid grid-cols-7 gap-2">
-          <div v-for="day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']" 
-               class="text-center font-medium text-gray-500 text-sm p-2">
-            {{ day }}
-          </div>
-          <button v-for="date in calendarDays" 
-                  :key="date.toISOString()"
-                  :class="[
-                    getDayColor(date),
-                    'p-4 rounded-lg transition-colors text-center hover:shadow-md'
-                  ]">
-            {{ format(date, 'd') }}
-          </button>
-        </div>
-      </template>
-      
     </div>
 
     <!-- Recent History -->

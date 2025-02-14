@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, startOfWeek, endOfWeek, startOfYear, endOfYear, addMonths, subMonths, addWeeks, subWeeks } from 'date-fns'
-import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
+
 
 interface WaterLog {
   date: string;
@@ -10,59 +10,16 @@ interface WaterLog {
 
 type ViewType = 'day' | 'week' | 'month' | 'year'
 
-const waterLogs = ref<WaterLog[]>([])
-const currentPints = ref(0)
-const isOpen = ref(false)
-const selectedDate = ref<Date | null>(null)
-const confirmationMessage = ref('')
+// Manually define the entries here
+const waterLogs = ref<WaterLog[]>([
+  { date: '2025-01-01', pints: 9 },
+  { date: '2025-02-11', pints: 4 },
+  { date: '2025-02-03', pints: 1 },
+
+]);
+
 const currentView = ref<ViewType>('year')
 const currentDate = ref(new Date())
-
-// Generate some random data for the year
-onMounted(() => {
-  // Clear existing water logs
-  waterLogs.value = [] // Remove all random data
-
-  // Optionally, you can keep this part if you want to generate new data later
-  // const start = startOfYear(new Date())
-  // const end = endOfYear(new Date())
-  // const days = eachDayOfInterval({ start, end })
-  
-  // days.forEach(day => {
-  //   if (Math.random() > 0.3) { // 70% chance of having a log
-  //     waterLogs.value.push({
-  //       date: format(day, 'yyyy-MM-dd'),
-  //       pints: Math.floor(Math.random() * 10) + 1 // 1-10 pints
-  //     })
-  //   }
-  // })
-})
-
-const addWaterLog = () => {
-  if (!selectedDate.value) return
-  
-  const dateStr = format(selectedDate.value, 'yyyy-MM-dd')
-  const existingLogIndex = waterLogs.value.findIndex(log => log.date === dateStr)
-  
-  if (existingLogIndex !== -1) {
-    if (currentPints.value === 0) {
-      waterLogs.value.splice(existingLogIndex, 1)
-      confirmationMessage.value = 'Removed beer intake log!'
-    } else {
-      waterLogs.value[existingLogIndex].pints = currentPints.value
-      confirmationMessage.value = 'Updated beer intake!'
-    }
-  } else {
-    if (currentPints.value > 0) {
-      waterLogs.value.push({
-        date: dateStr,
-        pints: currentPints.value
-      })
-      confirmationMessage.value = 'Added new beer intake log!'
-    }
-  }
-  isOpen.value = false
-}
 
 const getStatusColor = (pints: number) => {
   if (pints >= 7) return 'bg-slate-950 text-white'
@@ -89,11 +46,7 @@ const getDayColor = (date: Date) => {
 }
 
 const openDialog = (date: Date) => {
-  selectedDate.value = date
-  const dateStr = format(date, 'yyyy-MM-dd')
-  const log = waterLogs.value.find(log => log.date === dateStr)
-  currentPints.value = log ? log.pints : 0 // Default to 0 pints if no log exists
-  isOpen.value = true
+  // This function can be removed as the modal is no longer needed
 }
 
 const calendarDays = computed(() => {
@@ -219,35 +172,38 @@ const sortedLogs = computed(() => {
         </button>
       </div>
     </div>
-    
+
     <!-- Calendar View -->
     <div class="bg-white rounded-lg shadow-md p-6 mb-8">
 
-      <div class="mt-6 text-sm text-gray-600 flex gap-4 mb-10 align-middle items-center w-full bg-gray-50 p-4">
+          <!-- Color Coding Reference -->
+            <div class="mb-4 p-4 bg-gray-50 rounded-md">
 
-       
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-emerald-800"></div>
-          <span>0 pints <span style="font-weight: bold;">: 😇 Sober</span></span>
-        </div>
-       
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-yellow-400"></div>
-          <span>1-3 pints <span style="font-weight: bold;">: 🙃 Okay</span></span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-orange-600"></div>
-          <span>4-6 pints <span style="font-weight: bold;">: ☹️ Bad</span></span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-neutral-900"></div>
-          <span>7+ pints <span style="font-weight: bold;">: 🥴 BlackOut</span></span>
+      <div class="flex flex-row gap-6">
+
+        <div class="flex items-center">
+          <div class="w-4 h-4 rounded bg-emerald-700 mr-2"></div>
+          <span>0 pints: Sober</span>
         </div>
 
-
+        <div class="flex items-center">
+          <div class="w-4 h-4 rounded bg-yellow-400 mr-2"></div>
+          <span>1-3 pints: Good</span>
+        </div>
+        <div class="flex items-center">
+          <div class="w-4 h-4 rounded bg-orange-600 mr-2"></div>
+          <span>4-6 pints: Bad</span>
+        </div>
+        <div class="flex items-center">
+          <div class="w-4 h-4 rounded bg-slate-950 mr-2"></div>
+          <span>7+ pints: Blackout</span>
+        </div>
       </div>
 
 
+
+
+    </div>
       <template v-if="currentView === 'year'">
         <div class="grid grid-cols-3 gap-8">
           <div v-for="month in monthsInYear" :key="format(month, 'MM')" class="space-y-2">
@@ -262,7 +218,6 @@ const sortedLogs = computed(() => {
                 end: endOfMonth(month)
               })" 
                       :key="date.toISOString()"
-                      @click="openDialog(date)"
                       :class="[
                         getDayColor(date),
                         'p-1 rounded transition-colors text-center text-sm hover:shadow-sm'
@@ -282,7 +237,6 @@ const sortedLogs = computed(() => {
           </div>
           <button v-for="date in calendarDays" 
                   :key="date.toISOString()"
-                  @click="openDialog(date)"
                   :class="[
                     getDayColor(date),
                     'p-4 rounded-lg transition-colors text-center hover:shadow-md'
@@ -309,75 +263,5 @@ const sortedLogs = computed(() => {
         </div>
       </div>
     </div>
-
-    <!-- Headless UI Dialog for adding/editing water intake -->
-    <TransitionRoot appear :show="isOpen" as="template">
-      <Dialog as="div" @close="isOpen = false" class="relative z-10">
-        <TransitionChild
-          as="template"
-          enter="duration-300 ease-out"
-          enter-from="opacity-0"
-          enter-to="opacity-100"
-          leave="duration-200 ease-in"
-          leave-from="opacity-100"
-          leave-to="opacity-0"
-        >
-          <div class="fixed inset-0 bg-black bg-opacity-25" />
-        </TransitionChild>
-
-        <div class="fixed inset-0 overflow-y-auto">
-          <div class="flex min-h-full items-center justify-center p-4 text-center">
-            <TransitionChild
-              as="template"
-              enter="duration-300 ease-out"
-              enter-from="opacity-0 scale-95"
-              enter-to="opacity-100 scale-100"
-              leave="duration-200 ease-in"
-              leave-from="opacity-100 scale-100"
-              leave-to="opacity-0 scale-95"
-            >
-              <DialogPanel class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">
-                  Beer Intake for {{ selectedDate ? format(selectedDate, 'MMMM d, yyyy') : '' }}
-                </h3>
-                
-                <div class="mt-4">
-                  <label class="block text-sm font-medium text-gray-700 mb-2">
-                    Number of Pints
-                  </label>
-                  <input
-                    type="number"
-                    v-model="currentPints"
-                    min="0"
-                    class="w-full px-3 py-2 border rounded-md"
-                    placeholder="Enter number of pints"
-                  />
-                  <p class="mt-2 text-sm text-gray-500">
-                    Enter 0 to remove the log for this date
-                  </p>
-                </div>
-
-                <div class="mt-6 flex gap-3">
-                  <button
-                    type="button"
-                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    @click="addWaterLog"
-                  >
-                    Save
-                  </button>
-                  <button
-                    type="button"
-                    class="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    @click="isOpen = false"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </DialogPanel>
-            </TransitionChild>
-          </div>
-        </div>
-      </Dialog>
-    </TransitionRoot>
   </div>
 </template>

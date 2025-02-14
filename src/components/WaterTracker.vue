@@ -183,20 +183,20 @@ const sortedLogs = computed(() => {
 
         <div class="flex items-center">
           <div class="w-4 h-4 rounded bg-emerald-700 mr-2"></div>
-          <span>0 pints: Sober</span>
+          <span>0 pints: 😇 Sober</span>
         </div>
 
         <div class="flex items-center">
           <div class="w-4 h-4 rounded bg-yellow-400 mr-2"></div>
-          <span>1-3 pints: Good</span>
+          <span>1-3 pints: 🙃 Good</span>
         </div>
         <div class="flex items-center">
           <div class="w-4 h-4 rounded bg-orange-600 mr-2"></div>
-          <span>4-6 pints: Bad</span>
+          <span>4-6 pints: ☹️ Bad</span>
         </div>
         <div class="flex items-center">
           <div class="w-4 h-4 rounded bg-slate-950 mr-2"></div>
-          <span>7+ pints: Blackout</span>
+          <span>7+ pints: 🥴 BlackOut</span>
         </div>
       </div>
 

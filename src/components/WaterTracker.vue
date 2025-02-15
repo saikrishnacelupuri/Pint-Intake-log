@@ -57,6 +57,18 @@ const monthsInYear = computed(() => {
   return months
 })
 
+const calendarDays = computed(() => {
+  const days = []
+  const year = currentDate.value.getFullYear();
+  for (let month = 0; month < 12; month++) {
+    const start = startOfMonth(new Date(year, month, 1));
+    const end = endOfMonth(start);
+    const monthDays = eachDayOfInterval({ start, end });
+    days.push(monthDays);
+  }
+  return days;
+});
+
 const navigatePrevious = () => {
   switch (currentView.value) {
     case 'day':
@@ -113,7 +125,7 @@ const sortedLogs = computed(() => {
 
 <template>
   <div class="max-w-6xl mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-8 text-center">Kit's Pint Tracker🍺🍻🍻</h1>
+    <h1 class="text-3xl font-bold mb-8 text-center">Kit's Pint Tracker🍺</h1>
     
     <!-- View Switcher -->
     <div class="flex justify-between items-center mb-6">

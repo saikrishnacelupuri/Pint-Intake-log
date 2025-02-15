@@ -57,17 +57,7 @@ const monthsInYear = computed(() => {
   return months
 })
 
-const calendarDays = computed(() => {
-  const days = []
-  const year = currentDate.value.getFullYear();
-  for (let month = 0; month < 12; month++) {
-    const start = startOfMonth(new Date(year, month, 1));
-    const end = endOfMonth(start);
-    const monthDays = eachDayOfInterval({ start, end });
-    days.push(monthDays);
-  }
-  return days;
-});
+
 
 const navigatePrevious = () => {
   switch (currentView.value) {
